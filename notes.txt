@@ -1,0 +1,22 @@
+Notes: 
+Connect manually:
+
+Backend host machine -> Mongo container(exposed port) => localhost:exposedPort
+Backend container -> Mongo container(exposed port) => host.docker.internal:exposedPort
+
+
+--Named volume & bind volume:
+
+-Similarité: Les 2 enregistrent les données/folder/fichiers sur notre disque dur
+-Différences:
+Named volume:
+-On ne sait pas où sont enregistrées les données sur notre disque dur
+-Une fois container stoppé et redémarré, les données dans le container seront rechargées par celles enregistrées auparavant sur notre disque dur.(cas mongodb)
+
+    Bind volume:
+        -On sait exactement où sont enregistrées les données sur notre disque dur
+        -Effet mirroir: Chaque changement de donnée dans notre disque dur impactera tout de suite les données dans le container(cas hot update nodejs)
+
+-Règle importante: les données du path le plus long override celle du path le plus court
+
+--Anonymous volume: pour enregistrer temporairement les données, utilisé par ex : ne pas override le dossier node_modules lors de l'utilisation de Bind volume (-v /app/node_modules)
