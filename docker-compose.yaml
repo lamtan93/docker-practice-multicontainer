@@ -1,0 +1,39 @@
+services:
+  mongodb:
+    container_name: mongodb
+    image: 'mongo'
+    # environment:
+    #   - MONGO_INITDB_ROOT_USERNAME=corgi
+    #   - MONGO_INITDB_ROOT_PASSWORD=secret
+    env_file: 
+      - ./env/mongo.env
+    volumes:
+      - mongodata:/data/db
+  backend:
+    container_name: nodeApp
+    build: ./backend/
+    volumes:
+      - logs:/app/logs
+      - ./backend:/app
+      - /app/node_modules
+    ports:
+      - '80:80'
+    env_file:
+      - ./env/backend.env
+    depends_on:
+      - mongodb
+
+  frontend:
+    container_name: reactApp
+    build: ./frontend/
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./frontend/src:/app/src
+    stdin_open: true
+    tty: true
+    depends_on:
+      - backend
+volumes:
+  mongodata:
+  logs:
